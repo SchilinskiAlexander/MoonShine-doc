@@ -35,7 +35,7 @@ php artisan moonshine:page
 
 Nach Eingabe des Klassennamens wird eine Datei erstellt, die als Grundlage für die Seite im Admin-Panel dient. Standardmäßig befindet sie sich im Verzeichnis `app/MoonShine/Pages`.
 
-> [!HINWEIS]
+> [!NOTE]
 > Seiten werden automatisch im System registriert, wenn der Befehl ausgeführt wird. Wenn Sie jedoch eine Seite manuell erstellen, muss sie im `MoonShineServiceProvider` in der Methode `$core->pages()` registriert werden.
 
 Sie können auch den Klassennamen und den Verzeichnispfad im Befehl angeben.
