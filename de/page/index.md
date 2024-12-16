@@ -20,7 +20,7 @@
 <a name="grundlagen"></a>
 ## Grundlagen
 
-*Seite* ist die Grundlage des `MoonShine`-Admin-Panels. Der Hauptzweck von `Page` ist es, Komponenten darzustellen.
+*Page* ist die Grundlage des `MoonShine`-Admin-Panels. Der Hauptzweck von `Page` ist es, Komponenten darzustellen.
 
 Seiten mit ähnlicher Logik können in einer `Ressource` zusammengefasst werden.
 
