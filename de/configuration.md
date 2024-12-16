@@ -79,10 +79,10 @@ return [
 ];
 ```
 
-> [!HINWEIS]
+> [!NOTE]
 > `use_migrations`, `use_notifications`, `use_database_notifications` müssen entweder in `moonshine.php` oder im `MoonShineServiceProvider` angegeben werden.
 
-> [!HINWEIS]
+> [!NOTE]
 > Alle anderen nicht in der Datei angegebenen Parameter verwenden die Standardwerte.
 
 <a name="service-provider"></a>
@@ -129,7 +129,7 @@ class MoonShineServiceProvider extends ServiceProvider
 }
 ```
 
-> [!HINWEIS]
+> [!NOTE]
 > Die Konfiguration über `MoonShineServiceProvider` hat Vorrang vor den Einstellungen in der `moonshine.php`-Datei.
 > Bei Verwendung dieser Methode können Sie die Datei `moonshine.php` vollständig aus Ihrem Projekt entfernen.
 
@@ -304,7 +304,7 @@ $config->authDisable();
 ],
 ```
 
-> [!HINWEIS]
+> [!NOTE]
 > Dies wird während der Anwendungsinitialisierung angegeben und muss daher ausschließlich über die Konfigurationsdatei festgelegt werden.
 
 #### Middleware für Sitzung überprüfen
@@ -525,7 +525,7 @@ return [
 
 Dadurch können Sie die gewünschten Seiten und Formulare anhand ihrer Namen mit den Methoden `getPage` und `getForm` einfach abrufen.
 
-> [!HINWEIS]
+> [!NOTE]
 > Einige Methoden des `MoonShineConfigurator` haben keine direkten Entsprechungen in der Datei `moonshine.php` und umgekehrt. Dies liegt an den Unterschieden in den Ansätzen zur Konfiguration über die Datei und den Code.
 
 ### Beispiel für die Nutzung im MoonShineServiceProvider

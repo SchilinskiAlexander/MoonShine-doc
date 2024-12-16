@@ -191,7 +191,7 @@ Ein separater Chat auf Telegram wurde für aktive Projektteilnehmer erstellt. We
 
 2. Wenn Sie nicht wissen, wie das Problem gelöst werden kann, erstellen Sie ein GitHub-Issue, und wir werden das Problem bald beheben.
 
-> [!WARNUNG]
+> [!WARNING]
 > Es ist wichtig, dass Ihr PR alle Plattformtests besteht und eine detaillierte Beschreibung enthält, damit alle Entwicklungsteilnehmer verstehen, was genau passiert ist.
 
 <a name="hauptbranch"></a>

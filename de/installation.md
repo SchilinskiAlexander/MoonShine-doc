@@ -29,7 +29,7 @@ composer require "moonshine/moonshine:^3.0"
 php artisan moonshine:install
 ```
 
-> [!TIPP]
+> [!TIP]
 > Führen Sie die Installation nur einmal am Anfang durch. Nach der Installation kann alles über die [Konfiguration](/docs/{{version}}/configuration) eingestellt werden.
 
 Während des Installationsprozesses werden Sie aufgefordert:
