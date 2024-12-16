@@ -39,7 +39,7 @@
 
 - **Anfänger**: Ein niedriger Einstiegspunkt ermöglicht die einfache Umsetzung grundlegender Aufgaben wie Authentifizierung und `CRUD`-Operationen.
 
-> [!HINWEIS]
+> [!NOTE]
 > Um `MoonShine` effektiv nutzen zu können, sind grundlegende Kenntnisse in `Laravel` erforderlich. Anfängern wird empfohlen, zuerst die Grundlagen von `Laravel` zu erlernen.
 
 - **Professionelle Entwickler**: Die uneingeschränkte Nutzung aller Funktionen von `Laravel` mit zusätzlichen Werkzeugen zur Beschleunigung der Entwicklung.
