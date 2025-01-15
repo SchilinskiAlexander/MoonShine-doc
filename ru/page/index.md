@@ -17,6 +17,8 @@
 - [Создание ссылки на страницу в ресурсе](#link-from-resource)
 - [Assets](#assets)
 
+---
+
 <a name="basics"></a>
 ## Основы
 
@@ -37,15 +39,10 @@ php artisan moonshine:page
 По умолчанию он располагается в директории `app/MoonShine/Pages`.
 
 > [!NOTE]
+> О всех поддерживаемых опциях можно узнать в разделе [Команды](/docs/{{version}}/advanced/commands#page).
+
+> [!NOTE]
 > Страницы при выполнении команды автоматически регистрируются в системе, но если вы создаете страницу вручную, то её необходимо самостоятельно зарегистрировать в `MoonShineServiceProvider` в методе `$core->pages()`
-
-Также можно указать имя класса и директорию его расположения в команде.
-
-```php
-php artisan moonshine:page OrderStatistics --dir=Pages/Statistics
-```
-
-Файл `OrderStatistics` будет создан в директории `app/MoonShine/Pages/Statistics`.
 
 <a name="title"></a>
 ## Заголовок
@@ -68,6 +65,8 @@ class CustomPage extends Page
 Если для заголовка и подзаголовка требуется какая-то логика, то методы `title()` и `subtitle()` позволяют её реализовать:
 
 ```php
+use MoonShine\Laravel\Pages\Page;
+
 class CustomPage extends Page
 {
     // ...
@@ -92,6 +91,11 @@ class CustomPage extends Page
 Для регистрации компонентов страницы используется метод `components()`.
 
 ```php
+use MoonShine\Laravel\Pages\Page;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Components\Layout\Column;
+use MoonShine\UI\Components\Layout\Grid;
+
 class CustomPage extends Page
 {
     // ...
@@ -127,7 +131,7 @@ class CustomPage extends Page
 За генерацию хлебных крошек отвечает метод `getBreadcrumbs()`.
 
 ```php
-use MoonShine\Pages\Page;
+use MoonShine\Laravel\Pages\Page;
 
 class CustomPage extends Page
 {
@@ -152,6 +156,7 @@ class CustomPage extends Page
 
 ```php
 use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\Laravel\Pages\Page;
 
 class CustomPage extends Page
 {
@@ -172,6 +177,8 @@ class CustomPage extends Page
 Рассмотрим пример из пакета `moonshine-software/two-factor`, который демонстрирует, как можно использовать modifyLayout для настройки шаблона аутентификации:
 
 ```php
+use MoonShine\Contracts\UI\LayoutContract;
+
 /**
  * @param  LoginLayout  $layout
  */
@@ -191,6 +198,8 @@ protected function modifyLayout(LayoutContract $layout): LayoutContract
 Если необходимо изменить псевдоним страницы, это можно сделать через свойство `alias`.
 
 ```php
+use MoonShine\Laravel\Pages\Page;
+
 class CustomPage extends Page
 {
     protected ?string $alias = null;
@@ -202,7 +211,7 @@ class CustomPage extends Page
 Также можно переопределить метод `getAlias()`.
 
 ```php
-use MoonShine\Pages\Page;
+use MoonShine\Laravel\Pages\Page;
 
 class CustomPage extends Page
 {
@@ -242,6 +251,8 @@ Fortify::loginView(static fn() => app(ProfilePage::class));
 Метод `prepareBeforeRender()` позволяет выполнить какие-либо действия перед отображением страницы.
 
 ```php
+use MoonShine\Laravel\Pages\Page;
+
 class CustomPage extends Page
 {
     protected function prepareBeforeRender(): void
@@ -263,6 +274,8 @@ class CustomPage extends Page
 Метод `modifyResponse()` позволяет модифицировать ответ страницы перед его отправкой. Вот пример его использования:
 
 ```php
+use Symfony\Component\HttpFoundation\Response;
+
 protected function modifyResponse(): ?Response
 {
     if (request()->has('id')) {
@@ -332,6 +345,9 @@ class PostPage extends Page
 В данном примере для создания ссылки на новую страницу будем использовать [ActionButton](/docs/{{version}}/components/action-button) и метод [getPageUrl](/docs/{{version}}/model-resource/routes)
 
 ```php
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\ActionButton;
+
 /**
  * @throws Throwable
  */
@@ -351,6 +367,9 @@ public function indexButtons(): ListOf
 ## Assets
 
 ```php
+use MoonShine\AssetManager\Css;
+use MoonShine\AssetManager\Js;
+
 protected function onLoad(): void
 {
     parent::onLoad();

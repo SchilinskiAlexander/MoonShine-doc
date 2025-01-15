@@ -16,6 +16,7 @@
   - [Layout](#layout)
   - [Формы](#forms)
   - [Страницы](#pages)
+  - [Главная страница](#home-url)
 - [Получение страниц и форм](#pages-forms)
 - [Полный список параметров конфигурации](#configuration-options)
 - [Выбор метода конфигурации](#choosing-configuration-method)
@@ -50,7 +51,7 @@ return [
     'domain' => env('MOONSHINE_DOMAIN'),
     'prefix' => 'admin',
     'auth' => [
-        'enable' => true,
+        'enabled' => true,
         'guard' => 'moonshine',
     ],
     'use_migrations' => true,
@@ -115,7 +116,7 @@ class MoonShineServiceProvider extends ServiceProvider
         $config
             ->title('Мое приложение')
             ->logo('/assets/logo.png')
-            ->prefix('admin')
+            ->prefixes('admin', 'page', 'resource')
             ->guard('moonshine')
             ->authEnable()
             ->useMigrations()
@@ -207,14 +208,16 @@ tab: config/moonshine.php
 ```
 tab: app/Providers/MoonShineServiceProvider.php
 ```php
-$config->logo('/assets/logo.png')->logo('/assets/logo-small.png', small: true);
+$config
+    ->logo('/assets/logo.png')
+    ->logo('/assets/logo-small.png', small: true);
 ```
 ~~~
 
 <a name="middleware"></a>
 ### Middleware
 
-Вы можете переопределить или дополнить список `middleware` в системе
+Вы можете переопределить или дополнить список `middleware` в системе.
 
 ~~~tabs
 tab: config/moonshine.php
@@ -308,7 +311,7 @@ $config->guard('admin');
 tab: config/moonshine.php
 ```php
 'auth' => [
-    'enable' => false,
+    'enabled' => false,
     // ...
 ],
 ```
@@ -329,7 +332,7 @@ $config->authDisable();
 ```
 
 > [!NOTE]
-> Указывается при инициализации приложения, поэтому указывается исключительно через файл конфигурации
+> Указывается при инициализации приложения, поэтому указывается исключительно через файл конфигурации.
 
 #### Middleware для проверки наличия сессии
 
@@ -466,7 +469,7 @@ $config->layout(\App\MoonShine\Layouts\CustomLayout::class);
 <a name="forms"></a>
 ### Формы
 
-Для удобства мы вынесли формы аутентификации и фильтров в конфигурацию и даем быстрый способ их заменить на собственные
+Для удобства мы вынесли формы аутентификации и фильтров в конфигурацию и даем быстрый способ их заменить на собственные.
 
 ~~~tabs
 tab: config/moonshine.php
@@ -485,7 +488,7 @@ $config->set('forms.login', MyLoginForm::class);
 <a name="pages"></a>
 ### Страницы
 
-Для удобства мы вынесли базовые страницы в конфигурацию и даем быстрый способ их заменить на собственные
+Для удобства мы вынесли базовые страницы в конфигурацию и даем быстрый способ их заменить на собственные.
 
 ~~~tabs
 tab: config/moonshine.php
@@ -500,6 +503,27 @@ tab: config/moonshine.php
 tab: app/Providers/MoonShineServiceProvider.php
 ```php
 $config->changePage(LoginPage::class, MyLoginPage::class);
+```
+~~~
+
+<a name="home-url"></a>
+### Главная страница
+
+Вы можете указать какой роут или урл является главной страницей панели. 
+Используется при редиректе после успешной аутентификации, ссылке на логотипе и 404 странице.
+
+~~~tabs
+tab: config/moonshine.php
+```php
+'home_route' => 'moonshine.index',
+// or url string
+'home_url' => '/admin/page/some-page',
+```
+tab: app/Providers/MoonShineServiceProvider.php
+```php
+$config->homeRoute('moonshine.index');
+// or url string
+$config->homeUrl('/admin/page/some-page');
 ```
 ~~~
 
@@ -644,7 +668,7 @@ class MoonShineServiceProvider extends ServiceProvider
             })
         ;
 
-        // ..
+        // ...
     }
 }
 ```
@@ -660,15 +684,16 @@ class MoonShineServiceProvider extends ServiceProvider
 1. **Приоритет**: Конфигурация через `MoonShineServiceProvider` имеет приоритет над настройками в файле `moonshine.php`.
 
 2. **Гибкость**:
-   - Полная конфигурация через `moonshine.php` дает четкий обзор всех настроек.
-   - Частичная конфигурация через `moonshine.php` позволяет легко видеть, какие параметры были изменены.
+   - Полная конфигурация через `moonshine.php` дает четкий обзор всех настроек,
+   - Частичная конфигурация через `moonshine.php` позволяет легко видеть, какие параметры были изменены,
    - Конфигурация через `MoonShineServiceProvider` предоставляет максимальную гибкость и возможность использовать логику при настройке.
 
 3. **Простота поддержки**:
-   - Использование файла `moonshine.php` может быть проще для быстрых изменений и понимания общей структуры настроек.
+   - Использование файла `moonshine.php` может быть проще для быстрых изменений и понимания общей структуры настроек,
    - `MoonShineServiceProvider` позволяет централизованно управлять настройками в одном месте в коде.
 
 4. **Интеграция с кодом**:
    - Конфигурация через `MoonShineServiceProvider` лучше интегрируется с остальным кодом приложения и позволяет использовать зависимости и сервисы Laravel.
 
-Выберите метод, который лучше всего соответствует вашему стилю разработки и требованиям проекта. Вы также можете комбинировать эти подходы, например, используя файл `moonshine.php` для базовых настроек и `MoonShineServiceProvider` для более сложной конфигурации.
+Выберите метод, который лучше всего соответствует вашему стилю разработки и требованиям проекта.
+Вы также можете комбинировать эти подходы, например, используя файл `moonshine.php` для базовых настроек и `MoonShineServiceProvider` для более сложной конфигурации.

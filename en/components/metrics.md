@@ -103,7 +103,7 @@ ValueMetric::make('Orders')
 > For more detailed information, refer to the [Icons](/docs/{{version}}/appearance/icons) section.
 
 <a name="column-span"></a>
-### Block Width
+### Column width
 
 The `columnSpan()` method allows you to set the width of the block in the *Grid* layout.
 

@@ -3,7 +3,7 @@
 For positioning elements on the page, you can use the `Grid` component.
 
 ```php
-make(iterable $components = [])
+make(iterable $components = [], int $gap = 6)
 ```
 
 To position elements within the Grid, the `Column` component is used.
@@ -31,15 +31,17 @@ use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Text;
 
 Grid::make([
-    Column::make([
+    Column::make(
+        [
             Text::make(fake()->text())
         ],
         colSpan: 6,
         adaptiveColSpan: 6
     ),
-    Column::make([
-        Text::make(fake()->text())
-    ],
+    Column::make(
+        [
+            Text::make(fake()->text())
+        ],
         colSpan: 6,
         adaptiveColSpan: 6
     ),
@@ -47,13 +49,13 @@ Grid::make([
 ```
 tab: Blade
 ```blade
-<x-moonshine::grid>
-    <x-moonshine::column adaptiveColSpan="6" colSpan="6">
+<x-moonshine::layout.grid>
+    <x-moonshine::layout.column adaptiveColSpan="6" colSpan="6">
         {{ fake()->text() }}
-    </x-moonshine::column>
-    <x-moonshine::column adaptiveColSpan="6" colSpan="6">
+    </x-moonshine::layout.column>
+    <x-moonshine::layout.column adaptiveColSpan="6" colSpan="6">
         {{ fake()->text() }}
-    </x-moonshine::column>
-</x-moonshine::grid>
+    </x-moonshine::layout.column>
+</x-moonshine::layout.grid>
 ```
 ~~~

@@ -56,6 +56,9 @@ All fields inherit the base class `Field`, which provides basic methods for work
 To create an instance of a field, the static method `make()` is used.
 
 ```php
+use Closure;
+use MoonShine\UI\Fields\Text;
+
 Text::make(Closure|string|null $label = null, ?string $column = null, ?Closure $formatted = null)
 ```
 
@@ -69,6 +72,8 @@ Text::make(Closure|string|null $label = null, ?string $column = null, ?Closure $
 
 Example of a closure `$formatted` for formatting a value.
 ```php
+use MoonShine\UI\Fields\Text;
+
 Text::make(
     'Name',
     'first_name',
@@ -91,6 +96,9 @@ setLabel(Closure|string $label)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\Slug;
+
 Slug::make('Slug')
     ->setLabel(
         fn(Field $field) => $field->getData()?->exists
@@ -198,6 +206,8 @@ Available colors:
 <span style="background-color: rgb(243 244 246 / 1); color: rgb(31 41 55 / 1); padding: 5px; border-radius: 0.375rem">gray</span>
 
 ```php
+use MoonShine\Support\Enums\Color;
+
 Text::make('Title')
     ->badge(Color::PRIMARY)
 ```
@@ -205,6 +215,8 @@ Text::make('Title')
 or
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Title')
     ->badge(fn($status, Field $field) => 'green')
 ```
@@ -226,7 +238,9 @@ Text::make('Title')
 <a name="wrapper"></a>
 ### Wrapper
 
-Fields when displayed in forms use a special wrapper for headers, hints, links, etc. Sometimes there may arise a situation when it is necessary to display a field without additional elements. The `withoutWrapper()` method allows disabling the creation of a *wrapper*.
+Fields when displayed in forms use a special wrapper for headers, hints, links, etc.
+Sometimes there may arise a situation when it is necessary to display a field without additional elements.
+The `withoutWrapper()` method allows disabling the creation of a *wrapper*.
 
 ```php
 withoutWrapper(mixed $condition = null)
@@ -253,6 +267,9 @@ Text::make('Title')->sortable()
 The `sortable()` method can accept a database field name or a closure as a parameter.
 
 ```php
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+
 BelongsTo::make('Author')->sortable('author_id'),
 
 Text::make('Title')->sortable(function (Builder $query, string $column, string $direction) {
@@ -370,17 +387,20 @@ As a result, the name attribute will look like `<input name="options[name]>`. Th
 
 #### virtualName
 
-Sometimes it is necessary to store two values in one input field. For example, under a display condition one of the fields may become invisible but still exist in the DOM and be sent with the request.
+Sometimes it is necessary to store two values in one input field.
+For example, under a display condition one of the fields may become invisible but still exist in the DOM and be sent with the request.
 
 ```php
-File::make('image') // this is displayed in showWhen under one condition
-File::make('image') // this is displayed in showWhen under another condition
+File::make('image') // this is displayed in DOM under one condition
+
+File::make('image') // this is displayed in DOM under another condition
 ```
 
 To change the name attribute of these fields, the `virtualName` method is used.
 
 ```php
 File::make('image')->virtualColumn('image_1')
+//...
 File::make('image')->virtualColumn('image_2')
 ```
 
@@ -440,11 +460,12 @@ Text::make('Title')->customView('fields.my-custom-input')
 The `changePreview()` method allows overriding the view for preview (everywhere except the form).
 
 ```php
+use MoonShine\UI\Components\Thumbnails;
+use MoonShine\UI\Fields\Text;
+
 Text::make('Thumbnail')
-  ->changePreview(function ($value, Field $field) {
-      return view('moonshine::ui.image', [
-          'value' => Storage::url($value)
-      ]);
+  ->changePreview(function (?string $value, Text $field) {
+      return Thumbnails::make($value);
   })
 ```
 
@@ -491,6 +512,8 @@ afterRender(Closure $closure)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Title')
     ->beforeRender(function(Field $field) {
         return $field->preview();
@@ -511,6 +534,8 @@ Text::make('Name')
 or for relationship fields:
 
 ```php
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+
 BelongsTo::make('Item', 'item', resource: ItemResource::class)
     ->canSee(function (Comment $comment, BelongsTo $field) {
         // your condition
@@ -525,6 +550,8 @@ when($value = null, ?callable $callback = null, ?callable $default = null)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Slug')
     ->when(fn() => true, fn(Field $field) => $field->locked())
 ```
@@ -538,7 +565,9 @@ unless($value = null, ?callable $callback = null, ?callable $default = null)
 <a name="apply"></a>
 ### Apply
 
-Each field has an `apply()` method that transforms the data. To override the default `apply` of a field, you can use the `onApply()` method. Read more about the *lifecycle of field application* in the section [Basics > Field Application Process](/docs/{{version}}/fields/index#apply).
+Each field has an `apply()` method that transforms the data.
+To override the default `apply` of a field, you can use the `onApply()` method.
+Read more about the *lifecycle of field application* in the section [Basics > Field Application Process](/docs/{{version}}/fields/index#apply).
 
 ```php
 /**
@@ -548,6 +577,10 @@ onApply(Closure $onApply)
 ```
 
 ```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use MoonShine\UI\Fields\Text;
+
 Text::make('Thumbnail by link', 'thumbnail')
     ->onApply(function(Model $item, $value, Field $field) {
         $path = 'thumbnail.jpg';
@@ -588,7 +621,12 @@ First, create the `apply` class:
 php artisan moonshine:apply FileModelApply
 ```
 
+> [!NOTE]
+> You can learn about all supported options in the section [Commands](/docs/{{version}}/advanced/commands#apply).
+
 ```php
+use MoonShine\Contracts\UI\ApplyContract;
+use MoonShine\Contracts\UI\FieldContract;
 /**
  * @implements ApplyContract<File>
  */
@@ -775,6 +813,8 @@ Switcher::make('Active')
 ```
 
 ```php
+use MoonShine\Laravel\MoonShineRequest;
+
 public function someMethod(MoonShineRequest $request): void
 {
     // Logic
@@ -854,6 +894,7 @@ Enum::make('Status')
 
 For editing fields in preview mode, such as in a table or any other `IterableComponent`, there are the following methods.
 
+<a name="update-on-preview"></a>
 ### updateOnPreview
 
 The `updateOnPreview()` method allows editing a field in preview mode. After making changes (onChange event), the value of the field will be saved for the specific item.
@@ -879,6 +920,7 @@ public function updateOnPreview(
 Text::make('Name')->updateOnPreview()
 ```
 
+<a name="with-update-row"></a>
 ### withUpdateRow
 
 `withUpdateRow()` works similarly to `updateOnPreview()`, but can completely update the row in the table without reloading the page.
@@ -914,7 +956,7 @@ Text::make('Name')->updateInPopover('index-table-post-resource')
 ```
 
 > [!NOTE]
-> The methods `updateOnPreview`, `withUpdateRow`, and `updateInPopover` create the necessary endpoints and pass them to the `setUpdateOnPreviewUrl()` method, which works with [onChangeUrl()](#onchangeurl)
+> The methods `updateOnPreview`, `withUpdateRow`, and `updateInPopover` create the necessary endpoints and pass them to the `setUpdateOnPreviewUrl()` method, which works with [onChangeUrl()](#onchangeurl).
 
 <a name="assets"></a>
 ## Assets
@@ -922,6 +964,9 @@ Text::make('Name')->updateInPopover('index-table-post-resource')
 To add assets to the field, you can use the `addAssets()` method.
 
 ```php
+use Illuminate\Support\Facades\Vite;
+use MoonShine\AssetManager\Css;
+
 Text::make('Name')
     ->addAssets([
         new Css(Vite::asset('resources/css/text-field.css'))
@@ -933,6 +978,9 @@ If you are implementing your custom field, you can declare the asset set in it i
 1. Through the `assets()` method:
 
 ```php
+use MoonShine\AssetManager\Css;
+use MoonShine\AssetManager\Js;
+
 /**
  * @return list<AssetElementContract>
  */
@@ -948,6 +996,9 @@ protected function assets(): array
 2. Through the `booted()` method:
 
 ```php
+use MoonShine\AssetManager\Css;
+use MoonShine\AssetManager\Js;
+
 protected function booted(): void
 {
     parent::booted();
@@ -961,9 +1012,12 @@ protected function booted(): void
 <a name="macroable"></a>
 ## Macroable Trait
 
-All fields have access to the `Illuminate\Support\Traits\Macroable` trait with the `mixin` and `macro` methods. You can use this trait to extend the functionality of fields by adding new features without the need for inheritance.
+All fields have access to the `Illuminate\Support\Traits\Macroable` trait with the `mixin` and `macro` methods.
+You can use this trait to extend the functionality of fields by adding new features without the need for inheritance.
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Field::macro('myMethod', fn() => /*implementation*/)
 
 Text::make()->myMethod()
@@ -972,6 +1026,8 @@ Text::make()->myMethod()
 or
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Field::mixin(new MyNewMethods())
 ```
 
@@ -997,6 +1053,9 @@ reactive(
 > Fields that support reactivity: Text, Number, Checkbox, Select, Date, and their descendants.
 
 ```php
+use MoonShine\UI\Collections\Fields;
+use MoonShine\UI\Components\FormBuilder;
+
 FormBuilder::make()
     ->name('my-form')
     ->fields([
@@ -1013,7 +1072,8 @@ FormBuilder::make()
     ])
 ```
 
-In this example, the slug field is created based on the title. The slug will be generated during the input process.
+In this example, the slug field is created based on the title.
+The slug will be generated during the input process.
 
 > [!WARNING]
 > A reactive field can change the state of other fields but does not change its own state!
@@ -1021,6 +1081,10 @@ In this example, the slug field is created based on the title. The slug will be 
 To change the state of the field initiating reactivity, it is convenient to use the parameters of the `callback` function.
 
 ```php
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Collections\Fields;
+
 Select::make('Category', 'category_id')
     ->reactive(function(Fields $fields, ?string $value, Field $field, array $values): Fields {
         $field->setValue($value);
@@ -1077,6 +1141,18 @@ Text::make('Name')
 
 In this example, the field "Name" will only be displayed if the value of the field "category_id" is equal to 1, 2, or 3.
 
+When the showWhen condition is present on a field, hiding this field sets its DOM element to display:none and removes the name attribute so that the value of this hidden field does not end up in the final request.
+If you do not want the name attribute to be removed, you need to set the $submitShowWhen flag to true in your resource.
+
+```php
+class ArticleResource extends ModelResource
+{
+    protected bool $submitShowWhen = true;
+    
+    //...
+}
+```
+
 <a name="show-when-date"></a>
 ### showWhenDate Method
 
@@ -1110,7 +1186,8 @@ In this example, the field "Content" will only be displayed if the value of the 
 <a name="nested-fields"></a>
 ### Nested Fields
 
-The `showWhen` and `showWhenDate` methods support working with nested fields, such as working with the `Json` field. Point notation is used to access nested fields.
+The `showWhen` and `showWhenDate` methods support working with nested fields, such as working with the `Json` field.
+Point notation is used to access nested fields.
 
 ```php
 Text::make('Parts')
@@ -1151,7 +1228,8 @@ BelongsTo::make('Category', 'category', resource: CategoryResource::class)
 In this example, the field "Category" will only be displayed if the value of the field "created_at" is within the range between '2024-08-05 10:00' and '2024-08-05 19:00'.
 
 > [!NOTE]
-> When using multiple conditions, they are combined logically with "AND". The field will be displayed only if all specified conditions are fulfilled.
+> When using multiple conditions, they are combined logically with "AND".
+> The field will be displayed only if all specified conditions are fulfilled.
 
 <a name="supported-operators"></a>
 ### Supported Operators
@@ -1178,3 +1256,6 @@ To do this, use the command:
 ```shell
 php artisan moonshine:field
 ```
+
+> [!NOTE]
+> You can learn about all supported options in the section [Commands](/docs/{{version}}/advanced/commands#field).

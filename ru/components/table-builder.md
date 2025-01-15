@@ -167,6 +167,12 @@ TableBuilder::make()
 ])
 ```
 
+Если вам необходимо зафиксировать кнопки (sticky), тогда воспользуйтесь методом `stickyButtons()`:
+
+```php
+->stickyButtons()
+```
+
 <a name="view-methods"></a>
 ## Отображение
 
@@ -194,6 +200,15 @@ public function modifyDetailComponent(ComponentContract $component): ComponentCo
 
 - `title` - Колонка с заголовком
 - `value` - Колонка со значением
+
+Также можно передать целочисленное значение для указания колонок:
+
+```php
+$component->vertical(
+    title: 2,
+    value: 10,
+)
+```
 
 <a name="editable-table"></a>
 ### Редактируемая таблица
@@ -461,6 +476,7 @@ TableBuilder::make()
 ```php
 ->pushState()
 ```
+
 <a name="modify-row-checkbox"></a>
 ### Модификация чекбокса массовых действий
 
@@ -532,8 +548,8 @@ TableBuilder::make()
 
 Все параметры метода `async` являются опциональными, и по умолчанию `TableBuilder` автоматически укажет URL на основе текущей страницы.
 
-В процессе использования TableBuilder в режиме `async` может возникнуть задача, когда вы используете его вне админ-панели на страницах, не объявленных в системе MoonShine.
-Тогда вам потребуется указать собственный URL и реализовать ответ с HTML таблицы. Давайте рассмотрим пример реализации:
+В процессе использования *TableBuilder* в режиме `async` может возникнуть задача, когда вы используете его вне админ-панели на страницах, не объявленных в системе *MoonShine*.
+Тогда вам потребуется указать собственный URL и реализовать ответ с HTML таблицей. Давайте рассмотрим пример реализации:
 
 ```php
 TableBuilder::make()->name('my-table')->async(route('undefined-page.component', [
@@ -545,10 +561,6 @@ TableBuilder::make()->name('my-table')->async(route('undefined-page.component', 
 `Controller`
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 namespace App\MoonShine\Controllers;
 
 use Illuminate\Contracts\View\View;
@@ -658,7 +670,7 @@ TableBuilder::make()
 В этом примере мы привели данные к формату модели `User` с использованием `ModelCaster`.
 
 > [!NOTE]
-> За более подробной информацией обратитесь к разделу [TypeCasts](/docs/{{version}}/advanced/type-casts)
+> За более подробной информацией обратитесь к разделу [TypeCasts](/docs/{{version}}/advanced/type-casts).
 
 <a name="blade"></a>
 ## Использование в blade

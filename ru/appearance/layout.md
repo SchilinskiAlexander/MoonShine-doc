@@ -1,9 +1,10 @@
 # Layout
 
 - [Основы](#basics)
-- [Создание шаблона](#сreate)
+- [Создание шаблона](#create)
 - [Изменение шаблона страницы](#page)
 - [Assets](#assets)
+- [Favicons](#favicons)
 - [Меню](#menu)
     - [Верхнее меню](#top-menu)
 - [Цвета](#colors)
@@ -14,29 +15,29 @@
 <a name="basics"></a>
 ## Основы
 
-`Layout` в `MoonShine` представляет собой набор компонентов, формирующих структуру страницы административной панели. Каждый элемент страницы, включая `HTML`-теги, является компонентом `MoonShine`. Это обеспечивает высокую степень гибкости и возможность кастомизации.
+`Layout` в `MoonShine` представляет собой набор компонентов, формирующих структуру страницы административной панели.
+Каждый элемент страницы, включая `HTML`-теги, является компонентом `MoonShine`.
+Это обеспечивает высокую степень гибкости и возможность кастомизации.
 
 `MoonShine` предлагает два готовых шаблона:
 
-- `AppLayout` - базовый шаблон
-- `CompactLayout` - компактный шаблон
+- `AppLayout` - базовый шаблон,
+- `CompactLayout` - компактный шаблон.
 
-При установке `MoonShine` вы выбираете один из этих шаблонов по умолчанию. Выбранный шаблон публикуется в директорию `app/MoonShine/Layouts` и указывается в конфигурационном файле `moonshine.layout`.
+При установке `MoonShine` вы выбираете один из этих шаблонов по умолчанию.
+Выбранный шаблон публикуется в директорию `app/MoonShine/Layouts` и указывается в конфигурационном файле `moonshine.layout`.
 
 Вы можете:
 
-- Модифицировать существующий шаблон
-- Создать новый шаблон
-- Применять разные шаблоны для различных страниц
-
+- Модифицировать существующий шаблон,
+- Создать новый шаблон,
+- Применять разные шаблоны для различных страниц.
 
 Пример возможного шаблона вашего приложения:
 
 ```php
-<?php
-
-declare(strict_types=1);
-
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\PackageCategoryResource;
@@ -68,7 +69,7 @@ use MoonShine\UI\Components\{Breadcrumbs,
     Layout\Sidebar,
     Layout\ThemeSwitcher,
     Layout\Wrapper,
-    When};
+    When}; // [tl! collapse:end]
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -177,14 +178,16 @@ final class MoonShineLayout extends CompactLayout
 
 Как видите, начиная от тега `HTML` всё в `MoonShine` является компонентами, что дает огромную свободу кастомизации вашей админ-панели.
 
-Полный список компонентов ищите в разделе [Компоненты](/docs/{{version}}/components/index)
+Полный список компонентов ищите в разделе [Компоненты](/docs/{{version}}/components/index).
 
-> [!TIP]
-> Как можно заметить, компонентов огромное количество, и для удобства мы объединили их в группы, чтобы вы могли удобно переопределять только те группы, которые требуются
+> [!NOTE]
+> Как можно заметить, компонентов огромное количество, и для удобства мы объединили их в группы, чтобы вы могли удобно переопределять только те группы, которые требуются.
 
 ```php
-<?php
-// ..
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\CompactLayout;
+
 final class MoonShineLayout extends CompactLayout
 {
     // ...
@@ -208,7 +211,7 @@ final class MoonShineLayout extends CompactLayout
 }
 ```
 
-В примере с помощью методов `getFooterMenu`, `getFooterMenu` мы переопределили вывод меню в футере и copyright
+В примере, с помощью методов `getFooterMenu` и `getFooterCopyright`, мы переопределили вывод меню в футере и copyright.
 
 Доступные быстрые методы:
 
@@ -261,35 +264,39 @@ protected function getHomeUrl(): string
 ```
 
 > [!TIP]
-> Вы также можете создать собственный шаблон со своим набором удобных методов для дальнейшего удобного взаимодействия
+> Вы также можете создать собственный шаблон со своим набором удобных методов для дальнейшего удобного взаимодействия.
 
-<a name="publish"></a>
+<a name="create"></a>
 ## Создание шаблона
 
-Чтобы создать еще один шаблон, воспользуйтесь командой
+Чтобы создать еще один шаблон, воспользуйтесь командой:
 
 ```
 php artisan moonshine:layout
 ```
 
-После создания `Layout` появится в директории `app/MoonShine/Layouts`.
+> [!NOTE]
+> О всех поддерживаемых опциях можно узнать в разделе [Команды](/docs/{{version}}/advanced/commands#layout).
 
 <a name="page"></a>
 ## Изменение шаблона страницы
 
 По умолчанию страницы используют шаблон отображения `AppLayout` или `CompactLayout`.
-Но вы можете изменить на собственный шаблон, просто заменив значение свойства `$layout`
+Но вы можете изменить на собственный шаблон, просто заменив значение свойства `$layout`.
 
-Подробнее про страницы читайте в разделе [Страница](/docs/{{version}}/page/index)
+Подробнее про страницы читайте в разделе [Страница](/docs/{{version}}/page/index).
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
 use App\MoonShine\Layouts\MyLayout;
+use MoonShine\Laravel\Pages\Page;
 
 class CustomPage extends Page
 {
     protected ?string $layout = MyLayout::class;
 
-    //...
+    // ...
 }
 ```
 
@@ -299,9 +306,14 @@ class CustomPage extends Page
 Каждый шаблон может иметь свой набор стилей и скриптов, определяемых через метод `assets()`:
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\AssetManager\Css;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
 
     protected function assets(): array
     {
@@ -312,22 +324,55 @@ final class MyLayout extends AppLayout
         ];
     }
 
-    // ..
+    // ...
 }
 ```
 
 > [!NOTE]
-> За более подробной информацией обратитесь в раздел [Assets](/docs/{{version}}/appearance/assets)
+> За более подробной информацией обратитесь в раздел [Assets](/docs/{{version}}/appearance/assets).
+
+<a name="favicons"></a>
+## Favicons
+
+Вы можете заменить набор favicons в шаблоне через переопределение метода `getFaviconComponent()`:
+
+```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\AppLayout;
+
+final class MyLayout extends AppLayout
+{
+    // ...
+    
+    protected function getFaviconComponent(): Favicon
+    {
+        return parent::getFaviconComponent()->customAssets([
+            'apple-touch' => 'favicon_path',
+            '32' => 'favicon_path',
+            '16' => 'favicon_path',
+            'safari-pinned-tab' => 'favicon_path',
+            'web-manifest' => 'favicon_path',
+        ]);
+    }
+}
+```
 
 <a name="menu"></a>
 ## Меню
 
-Для каждого шаблона можно объявить список пунктов меню через метод `menu()`, которые автоматически будут переданы в компонент `Menu`
+Для каждого шаблона можно объявить список пунктов меню через метод `menu()`, которые автоматически будут переданы в компонент `Menu`.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\MenuManager\MenuItem;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
+
     protected function menu(): array
     {
         return [
@@ -335,23 +380,26 @@ final class MyLayout extends AppLayout
             MenuItem::make('Articles', ArticleResource::class),
         ];
     }
-    // ..
 }
 ```
 
 > [!NOTE]
-> За более подробной информацией обратитесь в раздел [Меню](/docs/{{version}}/appearance/menu)
+> За более подробной информацией обратитесь в раздел [Меню](/docs/{{version}}/appearance/menu).
 
 > [!TIP]
-> Вы также можете не пользоваться методом `menu`, а передать список вручную в компонент `Menu`
+> Вы также можете не пользоваться методом `menu`, а передать список вручную в компонент `Menu`.
 
 <a name="top-menu"></a>
 ### Верхнее меню
 
-По умолчанию `MoonShine` имеет компонент верхнего меню, который можно использовать вместо `Sidebar` или совместно с ним. Давайте посмотрим, как заменить `Sidebar` на `TopBar` в `Layout`.
+По умолчанию, `MoonShine` имеет компонент верхнего меню, который можно использовать вместо `Sidebar` или совместно с ним.
+Давайте посмотрим, как заменить `Sidebar` на `TopBar` в `Layout`.
 
 ```php
-// ..
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\CompactLayout;
+
 final class MoonShineLayout extends CompactLayout
 {
     // ...
@@ -391,17 +439,22 @@ final class MoonShineLayout extends CompactLayout
 ```
 
 > [!WARNING]
-> Если вы хотите оставить и Sidebar и TopBar одновременно, то обязательно соблюдайте очередность, первым должен идти TopBar
+> Если вы хотите оставить и Sidebar и TopBar одновременно, то обязательно соблюдайте очередность, первым должен идти TopBar.
 
 <a name="colors"></a>
 ## Цвета
 
-Каждый шаблон может иметь собственную цветовую схему, определяемую в методе `colors`:
+Каждый шаблон может иметь собственную цветовую схему, определяемую в методе `colors`.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\Contracts\ColorManager\ColorManagerContract;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
 
     /**
      * @param  ColorManager  $colorManager
@@ -453,13 +506,11 @@ final class MyLayout extends AppLayout
             ->infoBg('38, 93, 205', dark: true)
             ->infoText('179, 220, 255', dark: true);
     }
-
-    // ..
 }
 ```
 
 > [!NOTE]
-> За более подробной информацией обратитесь в раздел [Цветовая схема](/docs/{{version}}/appearance/colors)
+> За более подробной информацией обратитесь в раздел [Цветовая схема](/docs/{{version}}/appearance/colors).
 
 <a name="blade"></a>
 ## Blade

@@ -28,13 +28,19 @@
 php artisan moonshine:install
 ```
 
+Сигнатура:
+```
+moonshine:install {--u|without-user} {--m|without-migrations} {--l|default-layout} {--a|without-auth} {--d|without-notifications} {--t|tests-mode}
+```
+
 Доступные опции:
 
-- `-u`, `--without-user` - без создания супер-пользователя,
-- `-m`, `--without-migrations` - без выполнения миграций,
-- `-l`, `--default-layout` - выбор шаблона по умолчанию (без вопроса про компактную тему),
-- `-a`, `--without-auth` - без аутентификации,
-- `-d`, `--without-notifications` - без уведомлений,
+- `--u|without-user` - без создания супер-пользователя,
+- `--m|without-migrations` - без выполнения миграций,
+- `--l|default-layout` - выбор шаблона по умолчанию (без вопроса про компактную тему),
+- `--a|without-auth` - без аутентификации,
+- `--d|without-notifications` - без уведомлений,
+- `--t|tests-mode` - тестовый режим.
 
 > [!NOTE]
 > Для более подробной информации обратитесь к разделу [Установка](/docs/{{version}}/installation).
@@ -42,10 +48,15 @@ php artisan moonshine:install
 <a name="user"></a>
 ## Пользователь
 
-Команда, позволяющая создать супер-пользователя:
+Команда для создания супер-пользователя:
 
 ```shell
 php artisan moonshine:user
+```
+
+Сигнатура:
+```
+moonshine:user {--u|username=} {--N|name=} {--p|password=}
 ```
 
 Доступные опции:
@@ -63,20 +74,35 @@ php artisan moonshine:user
 php artisan moonshine:resource
 ```
 
+Сигнатура:
+```
+moonshine:resource {className?} {--type=} {--m|model=} {--t|title=} {--test} {--pest} {--p|policy} {--base-dir=} {--base-namespace=}
+```
+
 Доступные опции:
 
-- `--m|model=` - Eloquent модель для модельного ресурса,
+- `--m|model=` - eloquent модель для модельного ресурса,
 - `--t|title=` - заголовок раздела,
-- `--test` или `--pest` - дополнительно сгенерировать тестовый класс.
+- `--type=` - быстрый выбор типа ресурса (1 - по умолчанию, 2 - со страницами, 3 - пустой),
+- `--p|policy` - также создать Policy,
+- `--test` или `--pest` - дополнительно сгенерировать тестовый класс,
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
-При создании `Resource` доступно несколько вариантов:
+При создании ресурса доступно несколько вариантов:
 
-- **[Модельный ресурс по умолчанию](/docs/{{version}}/model-resource/fields)** - модельный ресурс по умолчанию,
-- **[Модельный ресурс со страницами](/docs/{{version}}/model-resource/pages)** - модельный ресурс со страницами,
-- **Пустой ресурс** - пустой ресурс для кастомных реализаций.
+- [Default model resource](/docs/{{version}}/model-resource/fields) - модельный ресурс по умолчанию с объявлением полей в методах `indexFields`, `formFields` и `detailFields`,
+- [Model resource with pages](/docs/{{version}}/model-resource/pages) - модельный ресурс c публикацией страниц `IndexPage`, `FormPage` и `DetailPage`,
+- **Empty resource** - пустой ресурс для кастомных реализаций.
 
 После выполнения команды в директории `app/MoonShine/Resources/` будет создан файл ресурса.
-Если создается модельный ресурс со страницами, в директории `app/MoonShine/Pages` будут созданы дополнительные страницы.
+Если создается модельный ресурс со страницами, то в директории `app/MoonShine/Pages` будут созданы дополнительные страницы.
+
+Примеры:
+```shell
+php artisan moonshine:resource Post --model=CustomPost --title="Articles"
+
+php artisan moonshine:resource Post --model="App\Models\CustomPost"
+```
 
 > [!NOTE]
 > Для более подробной информации обратитесь к разделу [Модельные ресурсы](/docs/{{version}}/model-resource/index).
@@ -84,49 +110,73 @@ php artisan moonshine:resource
 <a name="page"></a>
 ## Страница
 
-Команда создает страницу для админ-панели:
+Команда для создания страниц:
 
 ```shell
 php artisan moonshine:page
 ```
 
-- `--crud` - создает группу страниц: индексную, детальную и форму,
+Сигнатура:
+```
+moonshine:page {className?} {--force} {--without-register} {--crud} {--dir=} {--extends=} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--force` - не спрашивать тип страницы,
 - `--without-register` - без автоматической регистрации в провайдере,
+- `--crud` - создает группу страниц: индексную, детальную и форму,
 - `--dir=` - директория, в которой будут располагаться файлы относительно `app/MoonShine`, по умолчанию Page,
-- `--extends=` - класс, который будет расширять страница, например IndexPage, FormPage или DetailPage.
+- `--extends=` - класс, который будет расширять страница, например IndexPage, FormPage или DetailPage,
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 После выполнения команды в директории `app/MoonShine/Pages` будет создана страница по умолчанию (или группа страниц).
 
 > [!NOTE]
-> Для более подробной информации обратитесь к разделу [Страница](https:///docs/{{version}}/page/index).
+> Для более подробной информации обратитесь к разделу [Страница](/docs/{{version}}/page/index).
 
 <a name="layout"></a>
 ## Layout
 
-Команда создает шаблон для админ-панели:
+Команда для создания layout'а:
 
 ```shell
 php artisan moonshine:layout
 ```
 
+Сигнатура:
+```
+moonshine:layout {className?} {--compact} {--full} {--default} {--dir=} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
 - `--compact` - наследует компактную тему,
 - `--full` - наследует базовую тему,
-- `--default` - установить в конфиге как шаблон по умолчанию
+- `--default` - установить в конфиге как шаблон по умолчанию,
 - `--dir=` - директория, в которой будут располагаться файлы относительно `app/MoonShine`, по умолчанию `Layouts`,
-
-После выполнения команды в директории `app/MoonShine/Layouts` будет создан шаблон.
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 > [!NOTE]
-> Для более подробной информации обратитесь к разделу [Layout](https:///docs/{{version}}/page/index).
+> Для более подробной информации обратитесь к разделу [Layout](/docs/{{version}}/appearance/layout).
 
 <a name="component"></a>
 ## Компонент
 
-Команда создает пользовательский компонент:
+Команда для создания пользовательского компонента:
 
 ```shell
 php artisan moonshine:component
 ```
+
+Сигнатура:
+```
+moonshine:component {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 После выполнения команды в директории `app/MoonShine/Components` будет создан класс для компонента, а в директории `resources/views/admin/components` - файл `Blade`.
 
@@ -136,11 +186,20 @@ php artisan moonshine:component
 <a name="field"></a>
 ## Поле
 
-Команда позволяет создать пользовательское поле:
+Команда для создания пользовательского поля:
 
 ```shell
 php artisan moonshine:field
 ```
+
+Сигнатура:
+```
+moonshine:field {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 При выполнении команды можно указать, будет ли поле расширять базовый класс или другое поле.
 
@@ -158,31 +217,47 @@ php artisan moonshine:field
 php artisan moonshine:controller
 ```
 
+Сигнатура:
+```
+moonshine:controller {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
+
 После выполнения команды в директории `app/MoonShine/Controllers` будет создан класс контроллера, который можно использовать в маршрутах админ-панели.
 
 > [!NOTE]
 > Для более подробной информации обратитесь к разделу [Контроллеры](/docs/{{version}}/advanced/controllers).
 
-
 <a name="handler"></a>
 ## Обработчик
 
-Команда создает класс `Handler`:
+Команда для создания класса `Handler`:
 
 ```shell
 php artisan moonshine:handler
 ```
+
+Сигнатура:
+```
+moonshine:handler {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 После выполнения команды в директории `app/MoonShine/Handlers` будет создан класс обработчика.
 
 > [!NOTE]
 > Для более подробной информации обратитесь к разделу [Handlers](/docs/{{version}}/advanced/handlers).
 
-
 <a name="policy"></a>
 ## Политика
 
-Команда создает `Policy`, привязанную к пользователю админ-панели:
+Команда для создания класса `Policy`, привязанного к пользователю админ-панели:
 
 ```shell
 php artisan moonshine:policy
@@ -196,11 +271,20 @@ php artisan moonshine:policy
 <a name="type_cast"></a>
 ## Приведение типов
 
-Команда создает класс `TypeCast` для работы с данными:
+Команда для создания класса `TypeCast` для работы с данными:
 
 ```shell
 php artisan moonshine:type-cast
 ```
+
+Сигнатура:
+```
+moonshine:type-cast {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
 
 После выполнения команды в директории `app/MoonShine/TypeCasts` будет создан файл.
 
@@ -218,10 +302,10 @@ php artisan moonshine:publish
 
 Для публикации доступно несколько вариантов:
 
-- **Assets** - ассеты админ-панели `MoonShine`;
-- **Assets template** - создает шаблон для добавления собственных стилей или создания собственной темы для `MoonShine`;
-- **System Resources** - системные `MoonShineUserResource`, `MoonShineUserRoleResource`, которые вы можете изменить.
-- **System Forms** - системные `LoginForm`, `FiltersForm`, которые вы можете изменить.
+- **Assets** - ассеты админ-панели `MoonShine`,
+- **Assets template** - создает шаблон для добавления собственных стилей или создания собственной темы для `MoonShine`,
+- **System Resources** - системные `MoonShineUserResource`, `MoonShineUserRoleResource`, которые вы можете изменить,
+- **System Forms** - системные `LoginForm`, `FiltersForm`, которые вы можете изменить,
 - **System Pages** - системные `ProfilePage`, `LoginPage`, `ErrorPage`, которые вы можете изменить.
 
 #### Вы можете сразу указать тип публикации в команде.
@@ -246,4 +330,17 @@ php artisan moonshine:publish assets
 php artisan moonshine:apply
 ```
 
-После выполнения команды в директории `app/MoonShine/Applies` будет создан файл. Созданный класс необходимо зарегистрировать в сервис-провайдере.
+Сигнатура:
+```
+moonshine:apply {className?} {--base-dir=} {--base-namespace=}
+```
+
+Доступные опции:
+
+- `--base-dir=, --base-namespace=` - изменить базовую директорию и неймспейс класса.
+
+После выполнения команды в директории `app/MoonShine/Applies` будет создан файл.
+Созданный класс необходимо зарегистрировать в сервис-провайдере.
+
+> [!NOTE]
+> Для более подробной информации обратитесь к разделу [Поля](/docs/{{version}}/fields/basic-methods#apply).

@@ -32,7 +32,7 @@ protected function components(): iterable
                 ])
                 ->line([
                     'Avg' => Order::query()
-                        ->selectRaw('AVG(price) as average, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+                        ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
                         ->whereBetween('created_at', [$startDate, $endDate])
                         ->groupBy('date')
                         ->pluck('avg', 'date')

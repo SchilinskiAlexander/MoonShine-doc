@@ -52,6 +52,7 @@ protected function formFields(): iterable
     return [
         RelationRepeater::make('Characteristics', 'characteristics')
             ->fields([
+                ID::make(),
                 Text::make('Name', 'name'),
                 Text::make('Value', 'value'),
                 Switcher::make('Active', 'is_active')
@@ -59,6 +60,9 @@ protected function formFields(): iterable
     ];
 }
 ```
+
+> [!WARNING]
+> The presence of the `ID` field is required, otherwise records will always be added.
 
 <a name="vertical"></a>
 ## Vertical Mode

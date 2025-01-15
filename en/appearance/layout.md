@@ -1,9 +1,10 @@
 # Layout
 
 - [Basics](#basics)
-- [Creating a Template](#сreate)
+- [Creating a Template](#create)
 - [Changing the Page Template](#page)
 - [Assets](#assets)
+- [Favicons](#favicons)
 - [Menu](#menu)
     - [Top Menu](#top-menu)
 - [Colors](#colors)
@@ -14,28 +15,29 @@
 <a name="basics"></a>
 ## Basics
 
-`Layout` in `MoonShine` is a set of components that form the structure of the admin panel page. Each element of the page, including `HTML` tags, is a `MoonShine` component. This provides a high degree of flexibility and customization options.
+`Layout` in `MoonShine` is a set of components that form the structure of the admin panel page.
+Each element of the page, including `HTML` tags, is a `MoonShine` component.
+This provides a high degree of flexibility and customization options.
 
 `MoonShine` offers two ready-made templates:
 
-- `AppLayout` - basic template
-- `CompactLayout` - compact template
+- `AppLayout` - basic template,
+- `CompactLayout` - compact template.
 
-When installing `MoonShine`, you choose one of these templates by default. The selected template is published in the `app/MoonShine/Layouts` directory and specified in the `moonshine.layout` configuration file.
+When installing `MoonShine`, you choose one of these templates by default.
+The selected template is published in the `app/MoonShine/Layouts` directory and specified in the `moonshine.layout` configuration file.
 
 You can:
 
-- Modify an existing template
-- Create a new template
-- Apply different templates for various pages
+- Modify an existing template,
+- Create a new template,
+- Apply different templates for various pages.
 
 An example of a possible template for your application:
 
 ```php
-<?php
-
-declare(strict_types=1);
-
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\PackageCategoryResource;
@@ -67,7 +69,7 @@ use MoonShine\UI\Components\{Breadcrumbs,
     Layout\Sidebar,
     Layout\ThemeSwitcher,
     Layout\Wrapper,
-    When};
+    When}; // [tl! collapse:end]
 
 final class MoonShineLayout extends CompactLayout
 {
@@ -178,12 +180,14 @@ As you can see, starting from the `HTML` tag, everything in `MoonShine` consists
 
 Find the complete list of components in the [Components](/docs/{{version}}/components/index) section.
 
-> [!TIP]
+> [!NOTE]
 > As you may notice, there are a huge number of components, and for convenience, we have grouped them together so that you can conveniently override only the groups required.
 
 ```php
-<?php
-// ..
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\CompactLayout;
+
 final class MoonShineLayout extends CompactLayout
 {
     // ...
@@ -262,32 +266,37 @@ protected function getHomeUrl(): string
 > [!TIP]
 > You can also create your custom template with your own set of convenient methods for easier interaction in the future.
 
-<a name="publish"></a>
+<a name="create"></a>
 ## Creating a Template
 
-To create another template, use the command
+To create another template, use the command:
 
 ```
 php artisan moonshine:layout
 ```
 
-After creating, the `Layout` will appear in the `app/MoonShine/Layouts` directory.
+> [!NOTE]
+> You can learn about all supported options in the section [Commands](/docs/{{version}}/advanced/commands#layout).
 
 <a name="page"></a>
 ## Changing the Page Template
 
-By default, pages use the display template `AppLayout` or `CompactLayout`. But you can change it to your custom template by simply replacing the value of the `$layout` property.
+By default, pages use the display template `AppLayout` or `CompactLayout`.
+But you can change it to your custom template by simply replacing the value of the `$layout` property.
 
 Read more about pages in the [Page](/docs/{{version}}/page/index) section.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
 use App\MoonShine\Layouts\MyLayout;
+use MoonShine\Laravel\Pages\Page;
 
 class CustomPage extends Page
 {
     protected ?string $layout = MyLayout::class;
 
-    //...
+    // ...
 }
 ```
 
@@ -297,9 +306,14 @@ class CustomPage extends Page
 Each template can have its own set of styles and scripts defined through the `assets()` method:
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\AssetManager\Css;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
 
     protected function assets(): array
     {
@@ -310,12 +324,39 @@ final class MyLayout extends AppLayout
         ];
     }
 
-    // ..
+    // ...
 }
 ```
 
 > [!NOTE]
 > For more detailed information, refer to the [Assets](/docs/{{version}}/appearance/assets) section.
+
+<a name="favicons"></a>
+## Favicons
+
+You can replace the set of favicons in a template by overriding the `getFaviconComponent()` method:
+
+```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\AppLayout;
+
+final class MyLayout extends AppLayout
+{
+    // ...
+    
+    protected function getFaviconComponent(): Favicon
+    {
+        return parent::getFaviconComponent()->customAssets([
+            'apple-touch' => 'favicon_path',
+            '32' => 'favicon_path',
+            '16' => 'favicon_path',
+            'safari-pinned-tab' => 'favicon_path',
+            'web-manifest' => 'favicon_path',
+        ]);
+    }
+}
+```
 
 <a name="menu"></a>
 ## Menu
@@ -323,9 +364,15 @@ final class MyLayout extends AppLayout
 For each template, you can declare a list of menu items via the `menu()` method, which will be automatically passed to the `Menu` component.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\MenuManager\MenuItem;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
+
     protected function menu(): array
     {
         return [
@@ -333,7 +380,6 @@ final class MyLayout extends AppLayout
             MenuItem::make('Articles', ArticleResource::class),
         ];
     }
-    // ..
 }
 ```
 
@@ -346,10 +392,14 @@ final class MyLayout extends AppLayout
 <a name="top-menu"></a>
 ### Top Menu
 
-By default, `MoonShine` has a top menu component that can be used instead of `Sidebar` or together with it. Let’s see how to replace `Sidebar` with `TopBar` in `Layout`.
+By default, `MoonShine` has a top menu component that can be used instead of `Sidebar` or together with it.
+Let’s see how to replace `Sidebar` with `TopBar` in `Layout`.
 
 ```php
-// ..
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
+use MoonShine\Laravel\Layouts\CompactLayout;
+
 final class MoonShineLayout extends CompactLayout
 {
     // ...
@@ -394,12 +444,17 @@ final class MoonShineLayout extends CompactLayout
 <a name="colors"></a>
 ## Colors
 
-Each template can have its own color scheme defined in the `colors` method:
+Each template can have its own color scheme defined in the `colors` method.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:2]
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\Contracts\ColorManager\ColorManagerContract;
+
 final class MyLayout extends AppLayout
 {
-    // ..
+    // ...
 
     /**
      * @param  ColorManager  $colorManager
@@ -451,8 +506,6 @@ final class MyLayout extends AppLayout
             ->infoBg('38, 93, 205', dark: true)
             ->infoText('179, 220, 255', dark: true);
     }
-
-    // ..
 }
 ```
 
@@ -521,3 +574,4 @@ An example of a basic template:
         </x-moonshine::layout.body>
     </x-moonshine::layout.html>
 </x-moonshine::layout>
+```

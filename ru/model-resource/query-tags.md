@@ -5,6 +5,7 @@
 - [Активный элемент](#active-item)
 - [Условие отображения](#display-condition)
 - [Псевдоним](#alias)
+- [Выпадающий список](#dropdown)
 
 ---
 
@@ -54,6 +55,7 @@ class PostResource extends ModelResource
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -77,7 +79,7 @@ default(Closure|bool|null $condition = null)
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -94,7 +96,7 @@ QueryTag::make(
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -113,7 +115,7 @@ QueryTag::make(
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -121,4 +123,21 @@ QueryTag::make(
     fn(Builder $query) => $query->where('is_archived', true)
 )
     ->alias('archive')
+```
+
+<a name="dropdown"></a>
+## Выпадающий список
+
+По умолчанию все кнопки-теги выводятся в строку, но вы можете вывести их через выпадающий список.
+Для этого в ресурсе измените свойство `$queryTagsInDropdown`:
+
+```php
+class PostResource extends ModelResource 
+{
+    // ...
+    
+    protected bool $queryTagsInDropdown = true;
+    
+    // ...
+}
 ```

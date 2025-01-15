@@ -117,7 +117,7 @@ style(string|array $styles)
 ```
 
 ```php
-$component->style(['color' => 'red']);
+$component->style(['color: red']);
 ```
 
 <a name="alpine"></a>

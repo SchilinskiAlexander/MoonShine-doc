@@ -40,5 +40,5 @@ tab: Blade
 Вы также можете указать атрибут `alt`.
 
 ```php
-<x-moonshine::thumbnails :items="/images/thumb_1.jpg" alt="Description"/>
+<x-moonshine::thumbnails :items="'/images/thumb_1.jpg'" alt="Description"/>
 ```

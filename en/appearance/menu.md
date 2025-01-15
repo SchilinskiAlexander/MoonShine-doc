@@ -18,11 +18,13 @@
 <a name="basics"></a>
 ## Basics
 
-**Menu** is the foundation for navigation in the admin panel, so we have tried to create a flexible system that allows you to fully customize the menu for different pages and users.
+**Menu** is the foundation for navigation in the admin panel, so we have tried to create a flexible system
+that allows you to fully customize the menu for different pages and users.
 
 The navigation menu is configured in a class that extends `MoonShine\Laravel\Layouts\AppLayout` through the `menu()` method.
 
-During the installation of the admin panel, depending on the configurations you choose, a class **App\MoonShine\Layouts\MoonShineLayout** will be created, which already contains the `menu()` method.
+During the installation of the admin panel, depending on the configurations you choose, a class **App\MoonShine\Layouts\MoonShineLayout** will be created,
+which already contains the `menu()` method.
 
 In the future, if necessary, you can create other ***Layouts*** for specific pages.
 
@@ -38,9 +40,11 @@ MenuItem::make(Closure|string $label, Closure|MenuFillerContract|string $filler,
 - `$blank` - open in a new tab.
 
 > [!TIP]
-> You can pass [ModelResource](), [Page]() or [Resource]() as the second parameter.
+> You can pass [ModelResource](/docs/{{version}}/model-resource/index), [Page](/docs/{{version}}/page/index) or [CrudResource](/docs/{{version}}/advanced/crud-resource) as the second parameter.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:5]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -49,8 +53,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -70,7 +73,8 @@ final class MoonShineLayout extends AppLayout
 <a name="groups"></a>
 ## Groups
 
-Menu items can be grouped together. For this, the class `MoonShine\MenuManager\MenuGroup` is used with the static method `make()`.
+Menu items can be grouped together.
+For this, the class `MoonShine\MenuManager\MenuGroup` is used with the static method `make()`.
 
 ```php
 MenuGroup::make(Closure|string $label, iterable $items, string|null $icon = null)
@@ -81,18 +85,19 @@ MenuGroup::make(Closure|string $label, iterable $items, string|null $icon = null
 - `$icon` - an icon for the group.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuGroup;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -113,18 +118,19 @@ setItems(iterable $items)
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuGroup;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -154,18 +160,19 @@ MenuDivider::make(Closure|string $label = '')
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuDivider;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -187,17 +194,18 @@ An icon can be assigned to both a menu item and a group. This can be implemented
 An icon can be set by passing the name as the third parameter in the static method `make()`.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -222,17 +230,19 @@ icon(string $icon, bool $custom = false, ?string $path = null)
 - `$path` - the path to the directory where the **blade** templates of icons are stored.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuGroup;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -254,14 +264,14 @@ final class MoonShineLayout extends AppLayout
 An icon will be displayed for the menu item if the **ModelResource**, **Page**, or **Resource** class has the `Icon` attribute set and the icon has not been overridden by other means.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:1]
 namespace MoonShine\Resources;
 
 #[Icon('users')]
 class MoonShineUserResource extends ModelResource
 {
-
-    //...
-
+    // ...
 }
 ```
 
@@ -294,7 +304,7 @@ use MoonShine\MenuManager\MenuItem;
 final class MoonShineLayout extends AppLayout
 {
 
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -316,6 +326,8 @@ translatable(string $key = '')
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:5]
 namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Resources\CommentResource;
@@ -324,8 +336,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -359,8 +370,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -382,6 +392,8 @@ You can specify a flag for the menu item to indicate whether to open the link in
 The flag can be set by passing the fourth parameter `true/false` or a closure in the static method `make()`.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:4]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -389,8 +401,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -414,6 +425,8 @@ blank(Closure|bool $blankCondition = true)
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:4]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -421,14 +434,13 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
         return [
             MenuItem::make('MoonShine Docs', 'https://moonshine-laravel.com/docs', 'heroicons.arrow-up', true),
-            MenuItem::make('Laravel Docs', 'https://laravel.com/docs', blank: fn() => true),
+            MenuItem::make('Laravel Docs', 'https://laravel.com/docs')->blank(fn() => true),
         ];
     }
 }
@@ -447,6 +459,8 @@ canSee(Closure $callback)
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\Providers;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -454,12 +468,11 @@ use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuDivider;
 use MoonShine\MenuManager\MenuGroup;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -490,6 +503,8 @@ whenActive(Closure $when)
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:4]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -497,8 +512,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -516,21 +530,22 @@ final class MoonShineLayout extends AppLayout
 Groups and menu items, like other components, can have custom attributes assigned.
 
 > [!TIP]
-> For more detailed information, refer to the section [Component Attributes](/docs/{{version}}/components/attributes)
+> For more detailed information, refer to the section [Component Attributes](/docs/{{version}}/components/attributes).
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:start]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Resources\MoonShineUserResource;
 use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuGroup;
-use MoonShine\MenuManager\MenuItem;
+use MoonShine\MenuManager\MenuItem; // [tl! collapse:end]
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -550,7 +565,7 @@ final class MoonShineLayout extends AppLayout
 <a name="change-button"></a>
 ## Change button
 
-A menu item is an [ActionButton](#) and you can change its attributes using the `changeButton` method.
+A menu item is an [ActionButton](/docs/{{version}}/components/action-button) and you can change its attributes using the `changeButton` method.
 
 ```php
 /**
@@ -560,16 +575,17 @@ changeButton(Closure $callback)
 ```
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:5]
 namespace App\MoonShine\Layouts;
 
-use MoonShine\UI\Components\ActionButton;
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\MenuManager\MenuItem;
+use MoonShine\UI\Components\ActionButton;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {
@@ -582,7 +598,8 @@ final class MoonShineLayout extends AppLayout
 ```
 
 > [!WARNING]
-> Some parameters of **ActionButton**, such as `url`, `badge`, `icon`, and others are overridden in the system. To change them, use the corresponding methods.
+> Some parameters of **ActionButton**, such as `url`, `badge`, `icon`, and others are overridden in the system.
+> To change them, use the corresponding methods.
 
 <a name="custom-view"></a>
 ## Custom view
@@ -596,6 +613,8 @@ customView(string $path)
 - `$path` - the path to the **blade** template.
 
 ```php
+// torchlight! {"summaryCollapsedIndicator": "namespaces"}
+// [tl! collapse:5]
 namespace App\MoonShine\Layouts;
 
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -604,8 +623,7 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-
-    //...
+    // ...
 
     protected function menu(): array
     {

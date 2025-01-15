@@ -13,7 +13,8 @@
 <a name="description"></a>
 ## Description
 
-Almost everything in *MoonShine* consists of components. The *MoonShineComponent* itself is a *blade* component and contains additional convenient methods for interaction in the admin panel.
+Almost everything in *MoonShine* consists of components.
+The *MoonShineComponent* itself is a *blade* component and contains additional convenient methods for interaction in the admin panel.
 
 <a name="conditional-methods"></a>
 ## Conditional Methods
@@ -21,8 +22,8 @@ Almost everything in *MoonShine* consists of components. The *MoonShineComponent
 You can conditionally display a component using the `canSee()` method.
 
 ```php
-Block::make()
-    ->canSee(function (Block $ctx) {
+Box::make()
+    ->canSee(function (Box $ctx) {
         return true;
     })
 ```
@@ -34,8 +35,8 @@ when($value = null, ?callable $callback = null, ?callable $default = null)
 ```
 
 ```php
-Block::make()
-    ->when(fn() => true, fn(Block $ctx) => $ctx)
+Box::make()
+    ->when(fn() => true, fn(Box $ctx) => $ctx)
 ```
 
 The `unless()` method is the opposite of the `when()` method.
@@ -54,7 +55,7 @@ customView(string $view, array $data = [])
 ```
 
 ```php
-Block::make('Title', [])->customView('component.my-custom-block')
+Box::make('Title', [])->customView('component.my-custom-block')
 ```
 
 <a name="on-before-render"></a>
@@ -70,7 +71,7 @@ public function onBeforeRender(Closure $onBeforeRender): static
 ```
 
 ```php
-Block::make('Title', [])->onBeforeRender(function(Block $ctx) {
+Box::make('Title', [])->onBeforeRender(function(Box $ctx) {
     // 
 })
 ```
@@ -81,7 +82,7 @@ Block::make('Title', [])->onBeforeRender(function(Block $ctx) {
 To add assets on the fly, you can use the `addAssets()` method.
 
 ```php
-Block::make()
+Box::make()
     ->addAssets([
         new Css(Vite::asset('resources/css/block.css'))
     ]),
@@ -120,12 +121,13 @@ protected function booted(): void
 <a name="macroable"></a>
 ## Macroable Trait
 
-All components have access to the `Illuminate\Support\Traits\Macroable` trait, which includes the `mixin` and `macro` methods. With this trait, you can extend the capabilities of components by adding new functionality without using inheritance.
+All components have access to the `Illuminate\Support\Traits\Macroable` trait, which includes the `mixin` and `macro` methods.
+With this trait, you can extend the capabilities of components by adding new functionality without using inheritance.
 
 ```php
 MoonShineComponent::macro('myMethod', fn() => /*implementation*/)
 
-Block::make()->myMethod()
+Box::make()->myMethod()
 ```
 
 or
@@ -135,7 +137,7 @@ or
 MoonShineComponent::mixin(new MyNewMethods())
 
 // for a specific one
-Block::mixin(new MyNewMethods())
+Box::mixin(new MyNewMethods())
 ```
 
 <a name="custom"></a>
@@ -147,3 +149,6 @@ To do this, use the command:
 ```shell
 php artisan moonshine:component
 ```
+
+> [!NOTE]
+> You can learn about all supported options in the section [Commands](/docs/{{version}}/advanced/commands#component).

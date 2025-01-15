@@ -157,6 +157,7 @@
 - ## Recipes
     - [Profile](/docs/{{version}}/recipes/profile)
     - [Select](/docs/{{version}}/recipes/select)
+    - [Tabs](/docs/{{version}}/recipes/tabs)
     - [Dashboard settings](/docs/{{version}}/recipes/dashboard-settings)
     - [IndexPage with CardsBuilder](/docs/{{version}}/recipes/index-page-cards)
     - [Breadcrumbs](/docs/{{version}}/recipes/custom-breadcrumbs)
@@ -167,3 +168,7 @@
     - [Template](/docs/{{version}}/recipes/template)
     - [UpdateOnPreview pivot](/docs/{{version}}/recipes/update-on-preview-pivot)
     - [Menu authorization](/docs/{{version}}/recipes/menu-authorization)
+    - [Async remove on click](/docs/{{version}}/recipes/async-remove-on-click)
+    - [Fields group](/docs/{{version}}/recipes/fields-group)
+    - [Multiple selectors/fragments](/docs/{{version}}/recipes/multiple-fragments-selectors)
+    - [Change config](/docs/{{version}}/recipes/change-config)

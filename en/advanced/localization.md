@@ -3,7 +3,6 @@
 - [Basics](#basics)
 - [Configuration](#configuration)
 - [Language Switching](#middleware)
-- [Russian Language](#ru)
 
 ---
 
@@ -26,11 +25,11 @@ Before you begin, be sure to review the [Configuration](/docs/{{version}}/config
 ~~~tabs
 tab: config/moonshine.php
 ```php
-'locale' => 'ru',
+'locale' => 'en',
 ```
 tab: app/Providers/MoonShineServiceProvider.php
 ```php
-$config->locale('ru');
+$config->locale('en');
 ```
 ~~~
 
@@ -69,34 +68,5 @@ tab: config/moonshine.php
 tab: app/Providers/MoonShineServiceProvider.php
 ```php
 $config->exceptMiddleware(ChangeLocale::class)->addMiddleware(MyChangeLocale::class);
-```
-~~~
-
-<a name="ru"></a>
-## Russian Language
-
-The `MoonShine` team has also implemented a package with support for the Russian language.
-
-### Installation
-
-```shell
-composer require moonshine/ru
-```
-
-```shell
-php artisan vendor:publish --provider="MoonShine\Ru\Providers\RuServiceProvider"
-```
-
-### Configuration
-
-~~~tabs
-tab: config/moonshine.php
-```php
-'locale' => 'ru',
-'locales' => ['en', 'ru'],
-```
-tab: app/Providers/MoonShineServiceProvider.php
-```php
-$config->locale('ru')->locales(['en', 'ru']);
 ```
 ~~~

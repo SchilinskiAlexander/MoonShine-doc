@@ -52,6 +52,7 @@ protected function formFields(): iterable
     return [
         RelationRepeater::make('Характеристики', 'characteristics')
             ->fields([
+                ID::make(),
                 Text::make('Название', 'name'),
                 Text::make('Значение', 'value'),
                 Switcher::make('Активно', 'is_active')
@@ -59,6 +60,9 @@ protected function formFields(): iterable
     ];
 }
 ```
+
+> [!WARNING]
+> Наличие поля `ID` обязательно, иначе записи будут всегда добавляться.
 
 <a name="vertical"></a>
 ## Вертикальный режим

@@ -56,6 +56,9 @@
 Для создания экземпляра поля используется статический метод `make()`.
 
 ```php
+use Closure;
+use MoonShine\UI\Fields\Text;
+
 Text::make(Closure|string|null $label = null, ?string $column = null, ?Closure $formatted = null)
 ```
 
@@ -69,6 +72,8 @@ Text::make(Closure|string|null $label = null, ?string $column = null, ?Closure $
 
 Пример замыкания `$formatted` для форматирования значения.
 ```php
+use MoonShine\UI\Fields\Text;
+
 Text::make(
     'Name',
     'first_name',
@@ -91,6 +96,9 @@ setLabel(Closure|string $label)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\Slug;
+
 Slug::make('Slug')
     ->setLabel(
         fn(Field $field) => $field->getData()?->exists
@@ -129,7 +137,6 @@ Text::make(fn() => __('Title'))
 Text::make('Name')
     ->insideLabel(),
 ```
-
 
 #### beforeLabel()
 
@@ -198,8 +205,9 @@ badge(string|Color|Closure|null $color = null)
 <span style="background-color: rgb(243 232 255 / 1); color: rgb(153 27 27 / 1); padding: 5px; border-radius: 0.375rem">red</span>
 <span style="background-color: rgb(243 244 246 / 1); color: rgb(31 41 55 / 1); padding: 5px; border-radius: 0.375rem">gray</span>
 
-
 ```php
+use MoonShine\Support\Enums\Color;
+
 Text::make('Title')
     ->badge(Color::PRIMARY)
 ```
@@ -207,6 +215,8 @@ Text::make('Title')
 или
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Title')
     ->badge(fn($status, Field $field) => 'green')
 ```
@@ -228,7 +238,8 @@ Text::make('Title')
 <a name="wrapper"></a>
 ### Обертка
 
-Поля при отображении в формах используют специальную обертку `wrapper` для заголовков, подсказок, ссылок и тд. Иногда может возникнуть ситуация, когда требуется отобразить поле без дополнительных элементов.
+Поля при отображении в формах используют специальную обертку `wrapper` для заголовков, подсказок, ссылок и тд.
+Иногда может возникнуть ситуация, когда требуется отобразить поле без дополнительных элементов.
 Метод `withoutWrapper()` позволяет отключить создание *wrapper*.
 
 ```php
@@ -256,6 +267,9 @@ Text::make('Title')->sortable()
 Метод `sortable()` в качестве параметра может принимать название поля в базе данных или замыкание.
 
 ```php
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+
 BelongsTo::make('Author')->sortable('author_id'),
 
 Text::make('Title')->sortable(function (Builder $query, string $column, string $direction) {
@@ -373,17 +387,20 @@ Text::make('Name')->wrapName('options')
 
 #### virtualName
 
-Иногда необходимо хранить по одному полю ввода два значения Field. Например, по условию отображение одно из полей может становиться невидимым, но присутствовать в DOM и отправляться вместе с запросом.
+Иногда необходимо хранить по одному полю ввода два значения Field.
+Например, по условию отображение одно из полей может становиться невидимым, но присутствовать в DOM и отправляться вместе с запросом.
 
 ```php
-File::make('image') //это отображается в showWhen на одном условии
-File::make('image') //это отображается в showWhen на другом условии
+File::make('image') // это поле отображается в DOM на одном условии
+
+File::make('image') // это поле отображается в DOM на другом условии
 ```
 
 Для того чтобы изменить атрибут name у этих полей, используется метод `virtualName`.
 
 ```php
 File::make('image')->virtualColumn('image_1')
+//...
 File::make('image')->virtualColumn('image_2')
 ```
 
@@ -443,11 +460,12 @@ Text::make('Title')->customView('fields.my-custom-input')
 Метод `changePreview()` позволяет переопределить view для превью (везде кроме формы).
 
 ```php
+use MoonShine\UI\Components\Thumbnails;
+use MoonShine\UI\Fields\Text;
+
 Text::make('Thumbnail')
-  ->changePreview(function ($value, Field $field) {
-      return view('moonshine::ui.image', [
-          'value' => Storage::url($value)
-      ]);
+  ->changePreview(function (?string $value, Text $field) {
+      return Thumbnails::make($value);
   })
 ```
 
@@ -494,6 +512,8 @@ afterRender(Closure $closure)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Title')
     ->beforeRender(function(Field $field) {
         return $field->preview();
@@ -514,6 +534,8 @@ Text::make('Name')
 или для полей отношений:
 
 ```php
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+
 BelongsTo::make('Item', 'item', resource: ItemResource::class)
     ->canSee(function (Comment $comment, BelongsTo $field) {
         //ваше условие
@@ -528,6 +550,8 @@ when($value = null, ?callable $callback = null, ?callable $default = null)
 ```
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Text::make('Slug')
     ->when(fn() => true, fn(Field $field) => $field->locked())
 ```
@@ -538,11 +562,12 @@ Text::make('Slug')
 unless($value = null, ?callable $callback = null, ?callable $default = null)
 ```
 
-
 <a name="apply"></a>
 ### Apply
 
-У каждого поля реализован метод `apply()`, который трансформирует данные. Чтобы переопределить стандартный `apply` у поля, можно воспользоваться методом `onApply()`. Подробнее *о цикле жизни применения поля* можно прочитать в разделе [Основы > Процесс применения полей](/docs/{{version}}/fields/index#apply).
+У каждого поля реализован метод `apply()`, который трансформирует данные.
+Чтобы переопределить стандартный `apply` у поля, можно воспользоваться методом `onApply()`.
+Подробнее *о цикле жизни применения поля* можно прочитать в разделе [Основы > Процесс применения полей](/docs/{{version}}/fields/index#apply).
 
 ```php
 /**
@@ -552,6 +577,10 @@ onApply(Closure $onApply)
 ```
 
 ```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use MoonShine\UI\Fields\Text;
+
 Text::make('Thumbnail by link', 'thumbnail')
     ->onApply(function(Model $item, $value, Field $field) {
         $path = 'thumbnail.jpg';
@@ -592,7 +621,12 @@ function onAfterApply(Closure $onBeforeApply)
 php artisan moonshine:apply FileModelApply
 ```
 
+> [!NOTE]
+> О всех поддерживаемых опциях можно узнать в разделе [Команды](/docs/{{version}}/advanced/commands#apply).
+
 ```php
+use MoonShine\Contracts\UI\ApplyContract;
+use MoonShine\Contracts\UI\FieldContract;
 /**
  * @implements ApplyContract<File>
  */
@@ -713,9 +747,9 @@ Select::make('Links')->options([
 <a name="on-change"></a>
 ### Методы onChange
 
-C помощью методов `onChangeMethod()` и `onChangeUrl()` можно добавить логику при изменении значений полей.
+С помощью методов `onChangeMethod()` и `onChangeUrl()` можно добавить логику при изменении значений полей.
 
->Методы onChangeUrl() или onChangeMethod() присутствуют у всех полей, кроме полей отношений HasOne и HasMany
+> Методы onChangeUrl() или onChangeMethod() присутствуют у всех полей, кроме полей отношений HasOne и HasMany.
 
 #### onChangeUrl()
 
@@ -779,6 +813,8 @@ Switcher::make('Active')
 ```
 
 ```php
+use MoonShine\Laravel\MoonShineRequest;
+
 public function someMethod(MoonShineRequest $request): void
 {
     // Logic
@@ -858,6 +894,7 @@ Enum::make('Status')
 
 Для редактирования полей в режиме preview, например в таблице или в любом другом `IterableComponent`, существуют следующие методы.
 
+<a name="update-on-preview"></a>
 ### updateOnPreview
 
 Метод `updateOnPreview()` позволяет редактировать поле в режиме предварительного просмотра. После внесения изменений (по событию onChange), значение поля будет сохранено для конкретного элемента.
@@ -883,6 +920,7 @@ public function updateOnPreview(
 Text::make('Name')->updateOnPreview()
 ```
 
+<a name="with-update-row"></a>
 ### withUpdateRow
 
 `withUpdateRow()` работает по аналогии с `updateOnPreview()`, но при этом может полностью обновить строку в таблице без перезагрузки страницы.
@@ -918,7 +956,7 @@ Text::make('Name')->updateInPopover('index-table-post-resource')
 ```
 
 > [!NOTE]
-> Методы `updateOnPreview`, `withUpdateRow`, `updateInPopover` формируют нужные endpoints и передают методу `setUpdateOnPreviewUrl()`, который работает с [onChangeUrl()](#onchangeurl)
+> Методы `updateOnPreview`, `withUpdateRow`, `updateInPopover` формируют нужные endpoints и передают методу `setUpdateOnPreviewUrl()`, который работает с [onChangeUrl()](#onchangeurl).
 
 <a name="assets"></a>
 ## Ассеты
@@ -926,6 +964,9 @@ Text::make('Name')->updateInPopover('index-table-post-resource')
 Для добавления ассетов к полю можно использовать метод `addAssets()`.
 
 ```php
+use Illuminate\Support\Facades\Vite;
+use MoonShine\AssetManager\Css;
+
 Text::make('Name')
     ->addAssets([
         new Css(Vite::asset('resources/css/text-field.css'))
@@ -937,6 +978,9 @@ Text::make('Name')
 1. Через метод `assets()`:
 
 ```php
+use MoonShine\AssetManager\Css;
+use MoonShine\AssetManager\Js;
+
 /**
  * @return list<AssetElementContract>
  */
@@ -949,9 +993,12 @@ protected function assets(): array
 }
 ```
 
-1. Через метод `booted()`:
+2. Через метод `booted()`:
 
 ```php
+use MoonShine\AssetManager\Css;
+use MoonShine\AssetManager\Js;
+
 protected function booted(): void
 {
     parent::booted();
@@ -965,9 +1012,12 @@ protected function booted(): void
 <a name="macroable"></a>
 ## Трейт Macroable
 
-Всем полям доступен трейт `Illuminate\Support\Traits\Macroable` c методами `mixin` и `macro`. С помощью этого трейта вы можете расширять возможности полей, добавляя в них новый функционал без использования наследования.
+Всем полям доступен трейт `Illuminate\Support\Traits\Macroable` с методами `mixin` и `macro`.
+С помощью этого трейта вы можете расширять возможности полей, добавляя в них новый функционал без использования наследования.
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Field::macro('myMethod', fn() => /*реализация*/)
 
 Text::make()->myMethod()
@@ -976,9 +1026,10 @@ Text::make()->myMethod()
 или
 
 ```php
+use MoonShine\UI\Fields\Field;
+
 Field::mixin(new MyNewMethods())
 ```
-
 
 <a name="reactive"></a>
 ## Реактивность
@@ -1002,6 +1053,9 @@ reactive(
 > Поля поддерживающие реактивность: Text, Number, Checkbox, Select, Date и их наследующие.
 
 ```php
+use MoonShine\UI\Collections\Fields;
+use MoonShine\UI\Components\FormBuilder;
+
 FormBuilder::make()
     ->name('my-form')
     ->fields([
@@ -1027,6 +1081,10 @@ Slug будет генерироваться в процессе ввода те
 Для изменения состояния поля инициирующего реактивность удобно воспользоваться параметрами `callback` функции.
 
 ```php
+use MoonShine\UI\Fields\Field;
+use MoonShine\UI\Fields\Select;
+use MoonShine\UI\Collections\Fields;
+
 Select::make('Category', 'category_id')
     ->reactive(function(Fields $fields, ?string $value, Field $field, array $values): Fields {
         $field->setValue($value);
@@ -1083,6 +1141,18 @@ Text::make('Name')
 
 В этом примере поле "Name" будет отображаться только если значение поля "category_id" равно 1, 2 или 3.
 
+Когда на поле присутствует условие `showWhen`, то при скрытии этого поля, на его DOM элемент устанавливается значение `display:none` и удаляется атрибут name, чтобы значение этого скрытого поля не попадало в итоговый запрос.
+Если вы не хотите, чтобы атрибут `name` удалялся, необходимо в вашем ресурсе установить флаг `$submitShowWhen` в значение `true`.
+
+```php
+class ArticleResource extends ModelResource
+{
+    protected bool $submitShowWhen = true;
+    
+    //...
+}
+```
+
 <a name="show-when-date"></a>
 ### Метод showWhenDate
 
@@ -1113,11 +1183,11 @@ Text::make('Content')
 > [!NOTE]
 > Вы можете использовать любой формат даты, который может быть распознан функцией `strtotime()`.
 
-
 <a name="nested-fields"></a>
 ### Вложенные поля
 
-Методы `showWhen` и `showWhenDate` поддерживают работу с вложенными полями, например для работы с полем `Json`. Для обращения к вложенным полям используется точечная нотация.
+Методы `showWhen` и `showWhenDate` поддерживают работу с вложенными полями, например для работы с полем `Json`.
+Для обращения к вложенным полям используется точечная нотация.
 
 ```php
 Text::make('Parts')
@@ -1142,7 +1212,7 @@ Json::make('Attributes', 'attributes')->fields([
     ])
 ]),
 ```
-В данном примере весь столбец `Parts` внтури `attributes` и весь столбец `Width` внтури `attributes.[n].settings` будет отображаться только если значение поля `category_id` равно 3.
+В данном примере весь столбец `Parts` внутри `attributes` и весь столбец `Width` внутри `attributes.[n].settings` будет отображаться только если значение поля `category_id` равно 3.
 
 <a name="multiple-conditions"></a>
 ### Множественные условия
@@ -1158,7 +1228,8 @@ BelongsTo::make('Category', 'category', , resource: CategoryResource::class)
 В этом примере поле "Category" будет отображаться только если значение поля "created_at" находится в диапазоне между '2024-08-05 10:00' и '2024-08-05 19:00'.
 
 > [!NOTE]
-> При использовании нескольких условий они объединяются логическим "И" (AND). Поле будет отображаться только если выполняются все заданные условия.
+> При использовании нескольких условий они объединяются логическим "И" (AND).
+> Поле будет отображаться только если выполняются все заданные условия.
 
 <a name="supported-operators"></a>
 ### Поддерживаемые операторы
@@ -1185,3 +1256,6 @@ BelongsTo::make('Category', 'category', , resource: CategoryResource::class)
 ```shell
 php artisan moonshine:field
 ```
+
+> [!NOTE]
+> О всех поддерживаемых опциях можно узнать в разделе [Команды](/docs/{{version}}/advanced/commands#field).

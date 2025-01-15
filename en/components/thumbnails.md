@@ -34,7 +34,7 @@ tab: Blade
 You can specify only one thumbnail
 
 ```blade
-<x-moonshine::thumbnails :items="/images/thumb_1.jpg"/>
+<x-moonshine::thumbnails :items="'/images/thumb_1.jpg'"/>
 ```
 
 You can also specify the `alt` attribute.

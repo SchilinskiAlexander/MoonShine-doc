@@ -21,7 +21,7 @@ APP_URL=http://moonshine.test:8080
 Если у вас есть формы, использующие URL с http, но ожидающие https:
 
 - Убедитесь, что у вас качественный SSL-сертификат
-- В middleware `TrustProxies` установите `protected $proxies = ['*']`
+- В middleware [`TrustProxies`](https://laravel.com/docs/requests#configuring-trusted-proxies) установите `protected $proxies = ['*']`
 
 <a name="error-page-not-found"></a>
 ## Ошибка "Страница не найдена"

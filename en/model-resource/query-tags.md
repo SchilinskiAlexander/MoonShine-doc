@@ -5,6 +5,7 @@
 - [Active Item](#active-item)
 - [Display Condition](#display-condition)
 - [Alias](#alias)
+- [Dropdown](#dropdown)
 
 ---
 
@@ -54,6 +55,7 @@ You can add an icon to the tag using the `icon()` method.
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -77,7 +79,7 @@ default(Closure|bool|null $condition = null)
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -94,7 +96,7 @@ You might want to display tags only under certain conditions. You can use the `c
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -113,7 +115,7 @@ The `alias()` method allows you to set a custom value for the URL.
 
 ```php
 use Illuminate\Database\Eloquent\Builder;
-
+use MoonShine\Laravel\QueryTags\QueryTag;
 //...
 
 QueryTag::make(
@@ -121,4 +123,21 @@ QueryTag::make(
     fn(Builder $query) => $query->where('is_archived', true)
 )
     ->alias('archive')
+```
+
+<a name="dropdown"></a>
+## Dropdown
+
+By default, all tag buttons are displayed in a line, but you can display them through a drop-down list.
+To do this, change the `$queryTagsInDropdown` property in the resource:
+
+```php
+class PostResource extends ModelResource 
+{
+    // ...
+    
+    protected bool $queryTagsInDropdown = true;
+    
+    // ...
+}
 ```
